@@ -1,0 +1,24 @@
+.slide {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  max-width: 1000px;
+  min-width: 600px;
+  max-height: 400px;
+  // min-height: 400px;
+}
+.swiper-pagenation-bullet {
+  background-color: #6e92fa !important;
+}
+.swiper-pagination-bullet {
+  background-color: #6e92fa !important;
+}
+.swiper-button-prev {
+  /* background-color: #6e92fa !important; */
+  color: #6e92fa !important;
+}
+.swiper-button-next {
+  /* color: #6e92fa !important; */
+  color: #6e92fa !important;
+}
