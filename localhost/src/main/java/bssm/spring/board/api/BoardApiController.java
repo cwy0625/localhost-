@@ -21,7 +21,7 @@ public class BoardApiController {
     private final BoardRepository boardRepository;
 
     @PostMapping("/api/post")
-    public BoardResponseDto saveMemberV2(@RequestBody @Valid BoardRequestDto request) {
+    public BoardResponseDto savePost(@RequestBody @Valid BoardRequestDto request) {
 
         boardService.savePost(request);
 
@@ -33,7 +33,7 @@ public class BoardApiController {
     }
 
     @PutMapping("/api/post/{id}")
-    public BoardResponseDto updateMemberV2(@PathVariable("id") Long id,
+    public BoardResponseDto updatePost(@PathVariable("id") Long id,
                                                @RequestBody @Valid BoardRequestDto request) {
 
         boardService.update(id, request);
@@ -64,6 +64,18 @@ public class BoardApiController {
         }
 
         return allPost;
+    }
+
+    @GetMapping("/api/board/post/{id}")
+    public BoardResponseDto findPost(@PathVariable("id") Long id){
+        BoardRequestDto post = boardService.getPost(id);
+
+        return new BoardResponseDto(
+                post.getWriter(),
+                post.getTitle(),
+                post.getContent(),
+                post.getLocalDateTime()
+        );
     }
 
     @DeleteMapping("/api/post/delete/{id}")
