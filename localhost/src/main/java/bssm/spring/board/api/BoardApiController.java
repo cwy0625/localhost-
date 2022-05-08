@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,4 +46,29 @@ public class BoardApiController {
                 board.getContent(),
                 board.getLocalDateTime());
     }
+
+    @GetMapping("/api/board/posts")
+    public List<BoardRequestDto> findPosts(){
+        List<Board> findAll = boardRepository.findAll();
+        List<BoardRequestDto> allPost = new ArrayList<>();
+
+        for(Board board : findAll){
+            BoardRequestDto build = BoardRequestDto.builder()
+                    .content(board.getContent())
+                    .localDateTime(board.getLocalDateTime())
+                    .writer(board.getWriter())
+                    .title(board.getTitle())
+                    .build();
+
+            allPost.add(build);
+        }
+
+        return allPost;
+    }
+
+    @DeleteMapping("/api/post/delete/{id}")
+    public void delete(@PathVariable("id") Long id){
+        boardService.deletePost(id);
+    }
+
 }
