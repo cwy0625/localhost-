@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "board_id")
     private Long id;
 
@@ -29,11 +29,16 @@ public class Board {
     private LocalDateTime localDateTime;
 
     @Builder
-    public Board(Long id, String writer, String title, String content, LocalDateTime localDateTime) {
-        this.id = id;
+    public Board(String writer, String title, String content, LocalDateTime localDateTime) {
         this.writer = writer;
         this.title = title;
         this.content = content;
         this.localDateTime = localDateTime;
+    }
+
+    public void updateBoard(String writer, String title, String content) {
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
     }
 }
