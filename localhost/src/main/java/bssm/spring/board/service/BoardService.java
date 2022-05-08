@@ -11,73 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-public class BoardService {
+public interface BoardService {
 
-    private final BoardRepository boardRepository;
+        public void savePost(BoardDto boardDto);
 
-    @Transactional
-    public void savePost(BoardDto boardDto){
-        boardRepository.save(boardDto.ToEntity());
-    }
+        public List<BoardDto> getBoardList();
 
-    @Transactional
-    public List<BoardDto> getBoardList(){
-        List<Board> all = boardRepository.findAll();
-        List<BoardDto> boardDtoList = new ArrayList<>();
+        public BoardDto getPost(Long id);
 
-        for(Board board : all){
-            BoardDto boardDto = BoardDto.builder()
-                    .id(board.getId())
-                    .title(board.getTitle())
-                    .content(board.getContent())
-                    .writer(board.getWriter())
-                    .localDateTime(board.getLocalDateTime())
-                    .build();
+        public void deletePost(Long id);
 
-            boardDtoList.add(boardDto);
-        }
+        public List<BoardDto> searchPosts(String keyword);
 
-        return boardDtoList;
-    }
-
-    @Transactional
-    public BoardDto getPost(Long id){
-        Optional<Board> boardWrapper = boardRepository.findById(id);
-        Board board = boardWrapper.get();
-
-        return BoardDto.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .writer(board.getWriter())
-                .localDateTime(board.getLocalDateTime())
-                .build();
-    }
-
-    @Transactional
-    public void deletePost(Long id){
-        boardRepository.deleteById(id);
-    }
-
-    @Transactional
-    public List<BoardDto> searchPosts(String keyword){
-        List<Board> boards = boardRepository.findByTitleContaining(keyword);
-        List<BoardDto> boardList = new ArrayList<>();
-
-        for(Board board : boards){
-            BoardDto build = BoardDto.builder()
-                    .id(board.getId())
-                    .title(board.getTitle())
-                    .content(board.getContent())
-                    .writer(board.getWriter())
-                    .localDateTime(board.getLocalDateTime())
-                    .build();
-
-            boardList.add(build);
-        }
-
-        return boardList;
-    }
 }
