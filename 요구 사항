@@ -1,0 +1,2 @@
+frontEnd : 회원 가입, 로그인, 게시판, 홈 ... -> api 연결
+backEnd : 회원 가입(user, 세원), 로그인(user, 세원), 게시판(board), 회원 관리(user, 권한, 세원) ... -> api 개발 후 배포
