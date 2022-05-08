@@ -1,12 +1,14 @@
 package bssm.spring.board.service;
 
 import bssm.spring.board.domain.Board;
-import bssm.spring.board.dto.BoardDto;
+import bssm.spring.board.dto.BoardRequestDto;
 import bssm.spring.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,23 +17,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
 
+    @PersistenceContext
+    private EntityManager em;
+
     private final BoardRepository boardRepository;
 
     @Transactional
     @Override
-    public void savePost(BoardDto boardDto){
+    public void savePost(BoardRequestDto boardDto){
         boardRepository.save(boardDto.ToEntity());
     }
 
     @Transactional
     @Override
-    public List<BoardDto> getBoardList(){
+    public List<BoardRequestDto> getBoardList(){
         List<Board> all = boardRepository.findAll();
-        List<BoardDto> boardDtoList = new ArrayList<>();
+        List<BoardRequestDto> boardDtoList = new ArrayList<>();
 
         for(Board board : all){
-            BoardDto boardDto = BoardDto.builder()
-                    .id(board.getId())
+            BoardRequestDto boardDto = BoardRequestDto.builder()
                     .title(board.getTitle())
                     .content(board.getContent())
                     .writer(board.getWriter())
@@ -46,12 +50,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Transactional
     @Override
-    public BoardDto getPost(Long id){
+    public BoardRequestDto getPost(Long id){
         Optional<Board> boardWrapper = boardRepository.findById(id);
         Board board = boardWrapper.get();
 
-        return BoardDto.builder()
-                .id(board.getId())
+        return BoardRequestDto.builder()
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writer(board.getWriter())
@@ -67,13 +70,12 @@ public class BoardServiceImpl implements BoardService{
 
     @Transactional
     @Override
-    public List<BoardDto> searchPosts(String keyword){
+    public List<BoardRequestDto> searchPosts(String keyword){
         List<Board> boards = boardRepository.findByTitleContaining(keyword);
-        List<BoardDto> boardList = new ArrayList<>();
+        List<BoardRequestDto> boardList = new ArrayList<>();
 
         for(Board board : boards){
-            BoardDto build = BoardDto.builder()
-                    .id(board.getId())
+            BoardRequestDto build = BoardRequestDto.builder()
                     .title(board.getTitle())
                     .content(board.getContent())
                     .writer(board.getWriter())
@@ -85,4 +87,14 @@ public class BoardServiceImpl implements BoardService{
 
         return boardList;
     }
+
+    @Transactional
+    @Override
+    public void update(Long id, BoardRequestDto dto) {
+        Optional<Board> byId = boardRepository.findById(id);
+        Board board = byId.get();
+
+        board.updateBoard(dto.getWriter(), dto.getTitle(), dto.getContent());
+    }
+
 }
