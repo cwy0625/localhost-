@@ -6,6 +6,7 @@ import bssm.spring.board.dto.BoardResponseDto;
 import bssm.spring.board.repository.BoardRepository;
 import bssm.spring.board.service.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -83,4 +84,9 @@ public class BoardApiController {
         boardService.deletePost(id);
     }
 
+    @GetMapping("/")
+    public void list(@RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<BoardRequestDto> boardDtoList = boardService.getBoardList(pageNum);
+        Integer[] pageList = boardService.getPageList(pageNum);
+    }
 }
